@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aeolus — The Breath That Powers the World</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+SC:wght@500&display=swap"
+    />
+    <link rel="stylesheet" href="hark.css" />
+    <link rel="stylesheet" href="hark-hero.css" />
+    <style>
+      :root {
+        --x-lapis: #1d3b7d; --x-deep: #0c1834; --x-ink: #15120d; --x-gold: #c9a24a; --x-gold-l: #ecd38f;
+        --x-gold-d: #7d5e1c; --x-parch: #f3e8cf; --x-parch-d: #e3d1a8; --x-serif: "Cormorant Garamond", Georgia, serif;
+        --x-sc: "Cormorant SC", "Cormorant Garamond", Georgia, serif; --x-ease: cubic-bezier(.2,.7,.2,1);
+      }
+      .x-body { background: var(--x-deep); color: var(--x-parch); }
+      .x-flow { margin: -12px calc(50% - 50vw) 0; font-family: var(--x-serif); font-size: 19px; line-height: 1.55; }
+      .x-flow h1, .x-flow h2, .x-flow h3 { font-family: var(--x-serif); font-weight: 500; line-height: 1.02; letter-spacing: -.01em; }
+      .x-flow em { font-style: italic; color: var(--x-gold-l); }
+      .x-sc { font-family: var(--x-sc); font-variant: small-caps; letter-spacing: .14em; font-size: 15px; text-transform: lowercase; }
+      .x-sec { position: relative; padding: clamp(90px, 12vw, 160px) clamp(20px, 6vw, 96px); overflow: hidden; }
+      .x-in { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; }
+      .x-num { display: flex; align-items: center; gap: 14px; color: var(--x-gold); margin-bottom: 18px; }
+      .x-num b { font: italic 500 22px/1 var(--x-serif); }
+      .x-num::after { content: ""; flex: 0 0 64px; height: 1px; background: currentColor; opacity: .6; }
+      .x-h2 { font-size: clamp(40px, 6vw, 78px); margin-bottom: 26px; max-width: 16ch; }
+      .x-lead { font-size: clamp(20px, 2vw, 24px); max-width: 60ch; }
+      .x-frame { border: 1px solid rgba(201,162,74,.7); outline: 1px solid rgba(201,162,74,.3); outline-offset: 6px; }
+      /* background paintings, parallax + Ken Burns */
+      .x-bg { position: absolute; inset: -12% 0; z-index: 0; will-change: transform; }
+      .x-bg img { width: 100%; height: 100%; object-fit: cover; animation: x-kb 38s ease-in-out infinite alternate; }
+      .x-bg::after { content: ""; position: absolute; inset: 0; background: var(--x-veil, none); }
+      @keyframes x-kb { to { transform: scale(1.12) translate(-1.5%, -1%); } }
+      .x-cloud { position: absolute; z-index: 1; width: var(--cw, 40vw); pointer-events: none; transition: translate 2.4s var(--x-ease), opacity 2.4s; }
+      .x-cloud img { width: 100%; opacity: var(--co, .55); animation: x-drift var(--cd, 60s) ease-in-out infinite alternate; }
+      @keyframes x-drift { to { transform: translateX(8vw); } }
+      /* fixed layers */
+      #x-wind { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+      .x-prog { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 50; background: linear-gradient(90deg, var(--x-gold), var(--x-gold-l)); transform-origin: 0 50%; transform: scaleX(0); box-shadow: 0 0 10px var(--x-gold); }
+      .x-rail { position: fixed; right: 18px; top: 50%; transform: translateY(-50%); z-index: 40; display: grid; gap: 2px; }
+      .x-rail a { display: flex; align-items: center; justify-content: flex-end; gap: 10px; min-height: 44px; min-width: 44px; text-decoration: none; color: var(--x-parch); font: italic 500 17px/1 var(--x-serif); opacity: .55; transition: opacity .3s; }
+      .x-rail a span { font-family: var(--x-sc); font-style: normal; font-size: 14px; letter-spacing: .12em; opacity: 0; transform: translateX(6px); transition: .3s; text-shadow: 0 1px 6px #000; }
+      .x-rail a:hover, .x-rail a.is-on { opacity: 1; color: var(--x-gold-l); }
+      .x-rail a:hover span, .x-rail a:focus-visible span { opacity: 1; transform: none; }
+      .x-pre { position: fixed; inset: 0; z-index: 100; display: grid; place-content: center; justify-items: center; gap: 22px; background: var(--x-deep); transition: opacity .8s, visibility .8s; }
+      .x-pre.is-done { opacity: 0; visibility: hidden; }
+      .x-pre svg { width: 120px; height: 120px; overflow: visible; }
+      .x-pre .x-rot { transform-origin: 60px 46px; animation: x-spin 1.3s cubic-bezier(.7,0,1,1) 1, x-spin .32s linear 1.3s infinite; }
+      @keyframes x-spin { to { transform: rotate(360deg); } }
+      .x-pre p { color: var(--x-gold); }
+      .x-pre i { display: block; width: 140px; height: 1px; background: var(--x-gold); transform-origin: 0; animation: x-load 1.4s var(--x-ease) forwards; transform: scaleX(0); }
+      @keyframes x-load { to { transform: none; } }
+      /* reveals */
+      .x-rv { opacity: 0; transform: translateY(26px); transition: opacity 1s var(--x-ease), transform 1s var(--x-ease); transition-delay: calc(var(--i, 0) * 110ms); }
+      .x-rv.is-in { opacity: 1; transform: none; }
+      .x-ln { display: block; overflow: hidden; padding-bottom: .08em; }
+      .x-ln > span { display: block; transform: translateY(110%); transition: transform 1.1s var(--x-ease); transition-delay: calc(var(--j, 0) * 140ms + 100ms); }
+      .is-in .x-ln > span { transform: none; }
+      h1.x-rv, h2.x-rv { opacity: 1; transform: none; }
+      /* I hero */
+      .x-hero { min-height: 100svh; display: flex; align-items: flex-end; --x-veil: linear-gradient(180deg, rgba(12,24,52,.1) 40%, rgba(12,24,52,.85)); }
+      .x-hero h1 { font-size: clamp(76px, 15vw, 220px); font-style: italic; font-weight: 400; color: var(--x-parch); text-shadow: 0 4px 40px rgba(0,0,0,.35); }
+      .x-hero .x-sub { font-size: clamp(24px, 3.2vw, 42px); font-style: italic; color: var(--x-gold-l); margin-top: 6px; }
+      .x-hero .x-line { margin-top: 18px; max-width: 40ch; }
+      .x-cue { margin-top: 44px; display: inline-flex; align-items: center; gap: 14px; color: var(--x-gold-l); }
+      .x-cue::before { content: ""; width: 1px; height: 46px; background: linear-gradient(var(--x-gold), transparent); animation: x-cue 2.2s ease-in-out infinite; transform-origin: top; }
+      @keyframes x-cue { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
+      /* II origins */
+      .x-parch { background-color: var(--x-parch); background-image: radial-gradient(ellipse at 30% 0%, #fbf3df, var(--x-parch) 50%, var(--x-parch-d)); color: var(--x-ink); }
+      .x-parch .x-num, .x-parch em, .x-parch .x-why b { color: #5e4410; }
+      .x-parch .x-why > div { border-top-color: #5e4410; }
+      .x-why { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px; margin: 48px 0 36px; }
+      .x-why > div { border-top: 1px solid var(--x-gold-d); padding-top: 18px; }
+      .x-why b { display: block; font: italic 500 30px/1 var(--x-serif); color: var(--x-gold-d); margin-bottom: 10px; }
+      .x-why h3 { font-size: 28px; margin-bottom: 8px; }
+      .x-quote { font: italic 400 clamp(28px, 3.6vw, 46px)/1.15 var(--x-serif); max-width: 24ch; color: var(--x-lapis); }
+      .x-band { --x-veil: linear-gradient(180deg, rgba(12,24,52,.55), rgba(12,24,52,.88)); padding-block: clamp(80px, 10vw, 130px); }
+      .x-tl { list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(170px, 1fr)); gap: 0; overflow-x: auto; scroll-snap-type: x mandatory; }
+      .x-tl li { position: relative; padding: 34px 20px 8px 0; scroll-snap-align: start; border-top: 1px solid rgba(201,162,74,.6); }
+      .x-tl li::before { content: ""; position: absolute; top: -6px; left: 0; width: 11px; height: 11px; border-radius: 50%; background: var(--x-gold); box-shadow: 0 0 0 4px rgba(201,162,74,.25), 0 0 16px var(--x-gold); }
+      .x-tl .x-when { font: italic 500 26px/1.1 var(--x-serif); color: var(--x-gold-l); display: block; margin-bottom: 8px; }
+      .x-tl p { font-size: 17px; line-height: 1.4; }
+      /* III anatomy */
+      .x-dark { background: radial-gradient(ellipse at 50% 0%, #1a2a52, var(--x-deep) 60%); }
+      .x-codex { position: relative; margin: 44px 0 0; }
+      .x-codex > img { width: 100%; height: auto; border-radius: 2px; }
+      .x-hot { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border: 0; border-radius: 50%; background: none; cursor: pointer; z-index: 3; }
+      .x-hot::before, .x-hot::after { content: ""; position: absolute; inset: 13px; border-radius: 50%; background: var(--x-gold); box-shadow: 0 0 0 3px rgba(255,248,225,.85), 0 0 14px var(--x-gold); }
+      .x-hot::after { inset: 8px; background: none; border: 2px solid var(--x-gold); box-shadow: none; animation: x-pulse 2s ease-out infinite; }
+      .x-hot[aria-expanded="true"]::before { background: var(--x-lapis); }
+      @keyframes x-pulse { from { transform: scale(.6); opacity: 1; } to { transform: scale(1.9); opacity: 0; } }
+      .x-hot span { position: absolute; left: 50%; top: 100%; transform: translateX(-50%); white-space: nowrap; font: 500 14px/1 var(--x-sc); letter-spacing: .1em; color: var(--x-ink); background: rgba(243,232,207,.92); padding: 4px 8px; border-radius: 2px; }
+      .x-tip { position: absolute; z-index: 4; width: min(320px, 80vw); transform: translate(26px, -50%); background-color: var(--x-parch); background-image: linear-gradient(160deg, #fbf3df, var(--x-parch-d)); color: var(--x-ink); padding: 20px 22px; box-shadow: 0 18px 50px rgba(0,0,0,.45); border: 1px solid var(--x-gold-d); outline: 1px solid rgba(125,94,28,.35); outline-offset: -6px; opacity: 0; pointer-events: none; transition: opacity .3s; }
+      .x-tip.is-open { opacity: 1; pointer-events: auto; }
+      .x-tip.is-flip { transform: translate(calc(-100% - 26px), -50%); }
+      .x-tip h3 { font-size: 28px; font-style: italic; margin-bottom: 6px; color: var(--x-lapis); }
+      .x-tip p { font-size: 18px; line-height: 1.45; }
+      .x-hint { margin-top: 20px; color: var(--x-gold-l); opacity: .85; }
+      /* IV simulator */
+      .x-sim { background: linear-gradient(180deg, #13295c, var(--x-lapis) 45%, #2a4f96); transition: background 1.2s; }
+      .x-sim.is-storm { background: linear-gradient(180deg, #07090f, #161b28 50%, #232837); }
+      .x-simgrid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: start; margin-top: 40px; }
+      .x-stage { position: relative; aspect-ratio: 1 / 1; max-height: 78vh; width: 100%; }
+      .x-stage canvas { width: 100%; height: 100%; display: block; }
+      .x-storm { position: absolute; top: 18px; left: 50%; transform: translate(-50%, -12px); padding: 10px 18px; background: rgba(160,30,20,.9); color: #fff4e6; font: 500 16px/1 var(--x-sc); letter-spacing: .16em; border: 1px solid #f0b0a0; opacity: 0; transition: .5s; white-space: nowrap; }
+      .is-storm .x-storm { opacity: 1; transform: translate(-50%, 0); animation: x-flash 1.4s ease-in-out infinite; }
+      @keyframes x-flash { 50% { box-shadow: 0 0 28px rgba(255,90,60,.7); } }
+      .x-ctl { display: grid; gap: 22px; }
+      .x-field label { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+      .x-field output { font: italic 500 30px/1 var(--x-serif); color: var(--x-gold-l); }
+      .x-range { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: none; margin: 0; cursor: pointer; }
+      .x-range::-webkit-slider-runnable-track { height: 2px; background: linear-gradient(90deg, var(--x-gold) var(--p, 30%), rgba(243,232,207,.3) var(--p, 30%)); }
+      .x-range::-moz-range-track { height: 2px; background: rgba(243,232,207,.3); }
+      .x-range::-moz-range-progress { height: 2px; background: var(--x-gold); }
+      .x-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; margin-top: -11px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff3c8, var(--x-gold) 60%, var(--x-gold-d)); border: 0; box-shadow: 0 0 14px rgba(236,211,143,.8); }
+      .x-range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff3c8, var(--x-gold) 60%, var(--x-gold-d)); border: 0; box-shadow: 0 0 14px rgba(236,211,143,.8); }
+      .x-scale { display: flex; justify-content: space-between; font-size: 14px; opacity: .7; }
+      .x-read { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(201,162,74,.45); }
+      .x-read > div { background: rgba(12,24,52,.82); padding: 16px 18px; }
+      .x-read .x-big { grid-column: 1 / -1; }
+      .x-read .x-sc { color: var(--x-gold-l); display: block; margin-bottom: 4px; }
+      .x-read strong { font: 500 clamp(30px, 3.4vw, 42px)/1 var(--x-serif); font-variant-numeric: tabular-nums; }
+      .x-read .x-big strong { font-size: clamp(46px, 6vw, 72px); color: var(--x-parch); }
+      .x-read small { display: block; margin-top: 6px; font-size: 16px; opacity: .8; }
+      .x-status { font-style: italic; color: var(--x-gold-l); min-height: 1.5em; }
+      .x-curve { height: 170px; position: relative; }
+      .x-curve canvas { width: 100%; height: 100%; display: block; }
+      .x-gbtn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; padding: 0 26px; font: 500 18px/1 var(--x-sc); letter-spacing: .12em; color: var(--x-ink); background-color: var(--x-gold-l); background-image: linear-gradient(180deg, var(--x-gold-l), var(--x-gold)); border: 0; border-radius: 2px; cursor: pointer; box-shadow: 0 0 0 1px var(--x-gold-d), 0 0 0 4px rgba(201,162,74,.25), 0 10px 30px rgba(0,0,0,.3); transition: transform .2s, box-shadow .3s; user-select: none; -webkit-user-select: none; }
+      .x-gbtn:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px var(--x-gold-d), 0 0 0 6px rgba(201,162,74,.3), 0 0 40px rgba(236,211,143,.5); }
+      .x-cube { font: italic 500 clamp(26px, 3vw, 36px)/1.1 var(--x-serif); color: var(--x-gold-l); opacity: 0; transform: translateY(8px); transition: .6s var(--x-ease); }
+      .x-cube.is-on { opacity: 1; transform: none; }
+      .x-cube small { display: block; font: 400 16px/1.4 var(--x-serif); color: var(--x-parch); opacity: .85; margin-top: 6px; font-style: normal; }
+      /* V Betz limit */
+      .x-betz { background: radial-gradient(ellipse at 40% 10%, #22326a, var(--x-deep) 65%); }
+      .x-betz .x-why b { color: var(--x-gold); }
+      .x-betz .x-why > div { border-top-color: rgba(201,162,74,.6); }
+      .x-bstage { position: relative; aspect-ratio: 4 / 3; width: 100%; transition: box-shadow .6s; }
+      .x-bstage canvas, .x-bq canvas { width: 100%; height: 100%; display: block; }
+      .x-bq { height: 180px; }
+      .x-betz .x-read > div { transition: background .6s, box-shadow .6s; }
+      .x-betz.is-betz .x-bstage { box-shadow: 0 0 0 1px var(--x-gold-l), 0 0 60px rgba(236,211,143,.55); }
+      .x-betz.is-betz .x-read .x-big { background: rgba(125,94,28,.55); box-shadow: inset 0 0 40px rgba(236,211,143,.35); }
+      .x-betz.is-betz .x-big strong { color: var(--x-gold-l); text-shadow: 0 0 24px rgba(236,211,143,.8); }
+      .x-bmsg { font: italic 500 clamp(22px, 2.4vw, 28px)/1.2 var(--x-serif); color: var(--x-gold-l); min-height: 1.3em; text-shadow: 0 0 18px rgba(236,211,143,.6); }
+      /* VII myth or fact */
+      .x-myth { background: radial-gradient(ellipse at 50% 100%, #1a2a52, var(--x-deep) 65%); }
+      .x-laurel { position: relative; width: 170px; height: 120px; margin-top: 10px; }
+      .x-laurel svg { width: 100%; height: 100%; }
+      .x-laurel strong { position: absolute; inset: 0; display: grid; place-items: center; padding-bottom: 8px; font: 500 34px/1 var(--x-serif); color: var(--x-gold-l); font-variant-numeric: tabular-nums; }
+      .x-mdone { font-style: italic; color: var(--x-gold-l); min-height: 1.5em; }
+      .x-mgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 22px; margin-top: 36px; }
+      .x-mcard { perspective: 1200px; }
+      .x-mflip { display: grid; min-height: 340px; transform-style: preserve-3d; transition: transform .9s var(--x-ease); }
+      .x-mcard.is-flipped .x-mflip { transform: rotateY(180deg); }
+      .x-mcard[data-done] { cursor: pointer; }
+      .x-mf, .x-mb { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 14px; padding: 26px 22px; backface-visibility: hidden; -webkit-backface-visibility: hidden; outline-offset: -7px; }
+      .x-mf { background-color: var(--x-parch); background-image: linear-gradient(160deg, #fbf3df, var(--x-parch-d)); color: var(--x-ink); border: 1px solid var(--x-gold-d); outline: 1px solid rgba(125,94,28,.35); }
+      .x-mf .x-sc { color: #5e4410; }
+      .x-mq { flex: 1; font: italic 500 26px/1.15 var(--x-serif); }
+      .x-mbtns { display: flex; gap: 10px; }
+      .x-mbtn { flex: 1; min-height: 46px; font: 500 17px/1 var(--x-sc); letter-spacing: .12em; color: var(--x-ink); background: none; border: 1px solid var(--x-gold-d); border-radius: 2px; cursor: pointer; transition: background .25s; }
+      .x-mbtn:hover, .x-mbtn.is-pick { background: var(--x-gold-l); }
+      .x-mb { transform: rotateY(180deg); background: linear-gradient(170deg, #2a4f96, var(--x-lapis) 55%, #13295c); color: var(--x-parch); border: 1px solid var(--x-gold); outline: 1px solid rgba(201,162,74,.4); }
+      .x-mres { color: var(--x-gold-l); }
+      .is-wrong .x-mres { color: #f6c0b2; }
+      .x-mv { font: italic 500 44px/1 var(--x-serif); color: var(--x-gold-l); }
+      .x-mb p:nth-child(3) { flex: 1; font-size: 19px; line-height: 1.45; }
+      .x-mturn { font-size: 14px; opacity: .75; }
+      /* VI world */
+      .x-world { --x-veil: linear-gradient(180deg, rgba(12,24,52,.82), rgba(12,24,52,.7) 50%, rgba(12,24,52,.92)); }
+      .x-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: rgba(201,162,74,.4); margin-top: 44px; }
+      .x-stats > div { background: rgba(12,24,52,.6); padding: 26px 24px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+      .x-stats strong { display: block; font: 500 clamp(44px, 5vw, 64px)/1 var(--x-serif); color: var(--x-gold-l); font-variant-numeric: tabular-nums; margin-bottom: 8px; }
+      .x-stats p { font-size: 17px; line-height: 1.4; }
+      .x-ticker { display: flex; align-items: center; gap: 26px; margin-top: 44px; padding: 26px 28px; background: rgba(12,24,52,.6); }
+      .x-ticker svg { flex: 0 0 96px; width: 96px; height: 96px; transform: rotate(-90deg); }
+      .x-ticker .x-tk { font: 500 clamp(30px, 3.6vw, 44px)/1 var(--x-serif); color: var(--x-gold-l); font-variant-numeric: tabular-nums; }
+      .x-split { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); margin-top: 56px; align-items: center; }
+      .x-split h3 { font-size: 30px; font-style: italic; margin-bottom: 20px; }
+      .x-bars { display: grid; gap: 16px; }
+      .x-bar { display: grid; grid-template-columns: 130px 1fr 80px; align-items: center; gap: 14px; font-size: 18px; }
+      .x-bar i { display: block; height: 14px; background: linear-gradient(90deg, var(--x-gold-d), var(--x-gold), var(--x-gold-l)); box-shadow: 0 0 14px rgba(201,162,74,.5); transform-origin: 0; transform: scaleX(0); transition: transform 1.6s var(--x-ease); transition-delay: calc(var(--i, 0) * 150ms); width: var(--w); }
+      .is-in .x-bar i { transform: none; }
+      .x-bar b { font: 500 22px/1 var(--x-serif); color: var(--x-gold-l); text-align: right; }
+      .x-ring { display: flex; align-items: center; gap: 24px; }
+      .x-ring svg { flex: 0 0 150px; width: 150px; height: 150px; transform: rotate(-90deg); }
+      .x-ring circle { fill: none; stroke-width: 14; transition: stroke-dasharray 1.8s var(--x-ease); }
+      .x-ring p { font-size: 18px; line-height: 1.5; }
+      .x-key { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; vertical-align: 0; }
+      .x-fine { font-size: 15px; opacity: .75; margin-top: 30px; }
+      /* VIII finale */
+      .x-fin { min-height: 100svh; display: grid; place-items: center; text-align: center; user-select: none; -webkit-user-select: none; cursor: crosshair; --x-veil: radial-gradient(ellipse at center, rgba(12,24,52,.55), rgba(12,24,52,.25) 70%); }
+      .x-fin .x-in { background: rgba(12,24,52,.72); padding: clamp(28px, 5vw, 56px); max-width: 680px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+      .x-meter { width: min(320px, 70vw); height: 4px; margin: 26px auto 22px; background: rgba(243,232,207,.25); }
+      .x-meter i { display: block; height: 100%; background: linear-gradient(90deg, var(--x-gold), #fff6d6); box-shadow: 0 0 16px var(--x-gold-l); transform-origin: 0; transform: scaleX(0); }
+      .x-final { font: italic 400 clamp(36px, 5.4vw, 68px)/1.08 var(--x-serif); color: var(--x-parch); margin-top: 8px; }
+      .x-final .x-ln > span { transform: translateY(110%); }
+      .is-shown .x-final .x-ln > span { transform: none; }
+      .is-blown .x-ask { display: none; }
+      .x-fin .x-final { display: none; }
+      .x-fin.is-blown .x-final { display: block; }
+      .x-fin.is-blown .x-cloud { translate: var(--sx, 60vw) var(--sy, 0); opacity: 0; }
+      .x-foot { position: relative; z-index: 2; padding: 40px clamp(20px, 6vw, 96px) 56px; border-top: 1px solid rgba(201,162,74,.4); display: flex; flex-wrap: wrap; gap: 14px 30px; justify-content: space-between; align-items: center; font-size: 16px; background: var(--x-deep); }
+      .x-foot nav { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+      .x-foot a { color: var(--x-gold-l); text-decoration: none; min-height: 44px; min-width: 44px; justify-content: center; display: inline-flex; align-items: center; }
+      .x-foot a:hover { text-decoration: underline; }
+      .x-flow :focus-visible { outline: 2px solid var(--x-gold-l); outline-offset: 3px; }
+      @media (max-width: 860px) {
+        .x-simgrid, .x-split { grid-template-columns: 1fr; }
+        .x-rail { display: none; }
+        .x-stage { max-height: none; }
+      }
+      @media (max-width: 700px) {
+        .x-flow { font-size: 18px; }
+        .x-tip, .x-tip.is-flip { position: relative; left: auto !important; top: auto !important; transform: none; width: auto; margin-top: 14px; display: none; }
+        .x-tip.is-open { display: block; }
+        .x-hot span { display: none; }
+        .x-bar { grid-template-columns: 96px 1fr 64px; font-size: 16px; }
+        .x-ring { flex-direction: column; align-items: flex-start; }
+        .x-ticker { flex-direction: column; align-items: flex-start; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .x-bg img, .x-cloud img, .x-hot::after, .x-cue::before, .x-pre .x-rot, .is-storm .x-storm { animation: none !important; }
+        .x-mflip { transition: none; }
+        .x-rv, .x-ln > span, .x-bar i, .x-ring circle, .x-cloud { transition: none !important; opacity: 1; transform: none !important; }
+        .x-fin.is-blown .x-cloud { opacity: 0; }
+      }
+    </style>
+  </head>
+  <body class="x-body">
+    <div class="x-pre" id="x-pre" aria-hidden="true">
+      <svg viewBox="0 0 120 120" fill="none" stroke="#c9a24a" stroke-width="1.4" stroke-linecap="round">
+        <path d="M60 46 L56 116 M60 46 L64 116 M50 116 H70" />
+        <g class="x-rot">
+          <circle cx="60" cy="46" r="4" />
+          <path d="M60 42 C57 28 58 12 60 2 C62 12 63 28 60 42Z" />
+          <path d="M60 42 C57 28 58 12 60 2 C62 12 63 28 60 42Z" transform="rotate(120 60 46)" />
+          <path d="M60 42 C57 28 58 12 60 2 C62 12 63 28 60 42Z" transform="rotate(240 60 46)" />
+        </g>
+      </svg>
+      <i></i>
+      <p class="x-sc">Aeolus</p>
+    </div>
+    <div class="x-prog" id="x-prog"></div>
+    <canvas id="x-wind" aria-hidden="true"></canvas>
+    <nav class="x-rail" aria-label="Sections">
+      <a href="#hero">I<span>Aeolus</span></a>
+      <a href="#origins">II<span>Origins</span></a>
+      <a href="#anatomy">III<span>Anatomy</span></a>
+      <a href="#turbine">IV<span>Your turbine</span></a>
+      <a href="#betz">V<span>Betz limit</span></a>
+      <a href="#world">VI<span>The world</span></a>
+      <a href="#myth">VII<span>Myth or fact</span></a>
+      <a href="#finale">VIII<span>Finale</span></a>
+    </nav>
+    <div class="page" id="top">
+      <main class="main">
+        <div class="x-flow">
+          <!-- I. HERO -->
+          <section class="x-sec x-hero" id="hero" data-nav="Aeolus" data-wind="1.1,1">
+            <div class="x-bg" data-par="0.18"><img id="x-heroimg" src="hero_aeolus.jpg" alt="Aeolus, god of the winds, blowing a golden breath across the sea toward white offshore turbines" /></div>
+            <div class="x-cloud" data-par="-0.25" style="--cw: 34vw; left: -8vw; top: 8%; --co: .45; --cd: 70s"><img src="cloud.png" alt="" /></div>
+            <div class="x-cloud" data-par="-0.45" style="--cw: 46vw; right: -14vw; top: 52%; --co: .35; --cd: 90s"><img src="cloud.png" alt="" /></div>
+            <div class="x-in" style="width: 100%">
+              <p class="x-num x-rv"><b>I</b><span class="x-sc">An interactive journey</span></p>
+              <h1 class="x-rv"><span class="x-ln"><span>Aeolus</span></span></h1>
+              <p class="x-sub x-rv">The breath that powers the world</p>
+              <p class="x-line x-rv">An interactive journey through wind energy.</p>
+              <p class="x-cue x-rv x-sc">Scroll to feel the wind</p>
+            </div>
+          </section>
+
+          <!-- II. WHERE WIND COMES FROM -->
+          <section class="x-sec x-parch" id="origins" data-nav="Origins" data-wind="0.6,0.35">
+            <div class="x-in">
+              <p class="x-num x-rv"><b>II</b><span class="x-sc">Where wind comes from</span></p>
+              <h2 class="x-h2 x-rv"><span class="x-ln"><span>Every breeze begins</span></span><span class="x-ln" style="--j: 1"><span>with <em>the Sun.</em></span></span></h2>
+              <div class="x-why">
+                <div class="x-rv"><b>i</b><h3>Uneven heat</h3><p>The Sun warms land, sea and sky unevenly, at the equator more than at the poles.</p></div>
+                <div class="x-rv"><b>ii</b><h3>Air on the move</h3><p>Warm air rises and cooler air rushes in to fill the gap. That rush is wind.</p></div>
+                <div class="x-rv"><b>iii</b><h3>A spinning planet</h3><p>Earth's spin curves those currents into the great global wind belts.</p></div>
+              </div>
+              <p class="x-quote x-rv">So wind power is really solar power, delivered by air.</p>
+            </div>
+          </section>
+          <section class="x-sec x-band" id="history" data-wind="0.9,0.6">
+            <div class="x-bg" data-par="0.15"><img src="history_windmills.jpg" alt="A Dutch landscape painting of windmills under a wide sky" /></div>
+            <div class="x-in">
+              <p class="x-num x-rv"><b>II · ii</b><span class="x-sc">Five thousand years of catching wind</span></p>
+              <ol class="x-tl">
+                <li class="x-rv"><span class="x-when">~5,000 years ago</span><p>Sails carry boats along the Nile.</p></li>
+                <li class="x-rv"><span class="x-when">500–900 AD</span><p>Persian windmills grind grain.</p></li>
+                <li class="x-rv"><span class="x-when">1888</span><p>Charles F. Brush's 12 kW turbine lights Cleveland.</p></li>
+                <li class="x-rv"><span class="x-when">1957</span><p>Johannes Juul's 200 kW Gedser turbine in Denmark: blueprint of the modern 3-blade design.</p></li>
+                <li class="x-rv"><span class="x-when">1991</span><p>Vindeby, Denmark: the first offshore wind farm.</p></li>
+                <li class="x-rv"><span class="x-when">Today</span><p>The largest offshore turbines exceed 20 MW.</p></li>
+              </ol>
+            </div>
+          </section>
+
+          <!-- III. ANATOMY -->
+          <section class="x-sec x-dark" id="anatomy" data-nav="Anatomy" data-wind="0.7,0.45">
+            <div class="x-in">
+              <p class="x-num x-rv"><b>III</b><span class="x-sc">Anatomy of a turbine</span></p>
+              <h2 class="x-h2 x-rv"><span class="x-ln"><span>From the codex:</span></span><span class="x-ln" style="--j: 1"><span><em>six parts</em> that tame the air.</span></span></h2>
+              <div class="x-codex x-rv" id="x-codex">
+                <img class="x-frame" src="codex_turbine.jpg" alt="A Da Vinci-style notebook sketch of a wind turbine, with a cutaway of its nacelle showing hub, gears and generator" />
+                <button class="x-hot" type="button" data-k="blades" style="left: 22.5%; top: 22%" aria-expanded="false"><span>Blades</span></button>
+                <button class="x-hot" type="button" data-k="tower" style="left: 27.6%; top: 75%" aria-expanded="false"><span>Tower</span></button>
+                <button class="x-hot" type="button" data-k="hub" style="left: 51.5%; top: 41%" aria-expanded="false"><span>Hub & pitch</span></button>
+                <button class="x-hot" type="button" data-k="gear" style="left: 67%; top: 31%" aria-expanded="false"><span>Gearbox</span></button>
+                <button class="x-hot" type="button" data-k="gen" style="left: 80%; top: 25%" aria-expanded="false"><span>Generator</span></button>
+                <button class="x-hot" type="button" data-k="yaw" style="left: 71.5%; top: 50%" aria-expanded="false"><span>Yaw</span></button>
+                <div class="x-tip" id="x-tip" role="dialog" aria-live="polite"><h3></h3><p></p></div>
+              </div>
+              <p class="x-hint x-sc x-rv">Touch a golden seal to read the notes</p>
+            </div>
+          </section>
+
+          <!-- IV. SPIN YOUR OWN TURBINE -->
+          <section class="x-sec x-sim" id="turbine" data-nav="Your turbine" data-wind="sim">
+            <div class="x-in">
+              <p class="x-num x-rv"><b>IV</b><span class="x-sc">Spin your own turbine</span></p>
+              <h2 class="x-h2 x-rv"><span class="x-ln"><span>Command the wind.</span></span><span class="x-ln" style="--j: 1"><span><em>Feel the cube law.</em></span></span></h2>
+              <p class="x-lead x-rv">Power grows with the square of the blade and the <em>cube</em> of the wind speed: P = ½ · 1.225 · π r² · v³ · 0.45.</p>
+              <div class="x-simgrid">
+                <div class="x-stage x-frame x-rv">
+                  <canvas id="x-tc" role="img" aria-label="An ivory and gold wind turbine spinning at the chosen wind speed"></canvas>
+                  <p class="x-storm">Storm — safety shutdown</p>
+                </div>
+                <div class="x-ctl x-rv">
+                  <div class="x-field">
+                    <label for="x-v"><span class="x-sc">Wind speed</span><output id="x-vo">8 m/s</output></label>
+                    <input class="x-range" id="x-v" type="range" min="0" max="30" step="0.1" value="8" />
+                    <div class="x-scale"><span>0</span><span>cut-in 3</span><span>rated 12</span><span>cut-out 25</span><span>30</span></div>
+                  </div>
+                  <div class="x-field">
+                    <label for="x-r"><span class="x-sc">Blade length</span><output id="x-ro">60 m</output></label>
+                    <input class="x-range" id="x-r" type="range" min="10" max="130" step="1" value="60" />
+                  </div>
+                  <div class="x-read">
+                    <div class="x-big"><span class="x-sc">Power output</span><strong id="x-p">0</strong><small class="x-status" id="x-st" aria-live="polite"></small></div>
+                    <div><span class="x-sc">Swept area</span><strong id="x-a">0</strong><small id="x-fp"></small></div>
+                    <div><span class="x-sc">Energy per day</span><strong id="x-e">0</strong><small id="x-rpm"></small></div>
+                  </div>
+                  <div class="x-curve" aria-hidden="true"><canvas id="x-pc"></canvas></div>
+                  <div><button class="x-gbtn" id="x-dbl" type="button">Double the wind!</button></div>
+                  <p class="x-cube" id="x-cube" aria-live="polite">8× the power — the cube law<small id="x-cubes"></small></p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- V. THE BETZ LIMIT -->
+          <section class="x-sec x-betz" id="betz" data-nav="Betz limit" data-wind="0.45,0.3">
+            <div class="x-in">
+              <p class="x-num x-rv"><b>V</b><span class="x-sc">The Betz limit</span></p>
+              <h2 class="x-h2 x-rv"><span class="x-ln"><span>Why no turbine can</span></span><span class="x-ln" style="--j: 1"><span><em>catch all the wind.</em></span></span></h2>
+              <div class="x-why">
+                <div class="x-rv"><b>i</b><h3>Stop it completely</h3><p>If a turbine stopped the air dead, no new air could flow through it.</p></div>
+                <div class="x-rv"><b>ii</b><h3>Don't slow it at all</h3><p>If the air passed through untouched, the turbine would catch nothing.</p></div>
+                <div class="x-rv"><b>iii</b><h3>The sweet spot</h3><p>Slow the wind to one-third of its speed. Real turbines reach about 45–50%.</p></div>
+              </div>
+              <div class="x-simgrid">
+                <div class="x-bstage x-frame x-rv">
+                  <canvas id="x-bc" role="img" aria-label="Air flows left to right through a golden rotor disk and slows down behind it"></canvas>
+                </div>
+                <div class="x-ctl x-rv">
+                  <div class="x-field">
+                    <label for="x-b"><span class="x-sc">How much the turbine slows the wind</span><output id="x-bo">0.80</output></label>
+                    <input class="x-range" id="x-b" type="range" min="0" max="1" step="0.01" value="0.8" aria-describedby="x-bs" />
+                    <div class="x-scale" id="x-bs"><span>0 · stops it dead</span><span>1 · leaves it untouched</span></div>
+                  </div>
+                  <div class="x-read">
+                    <div class="x-big"><span class="x-sc">Power captured · Cp</span><strong id="x-cp">32.4%</strong><small id="x-bd">The wind leaves at 80% of its speed.</small></div>
+                  </div>
+                  <p class="x-bmsg" id="x-bm" aria-live="polite"></p>
+                  <div class="x-bq" aria-hidden="true"><canvas id="x-bq"></canvas></div>
+                  <p class="x-fine" style="margin-top: 0">Cp = ½ (1 + b)(1 − b²), where b is the wind speed behind the rotor ÷ the speed ahead. Its maximum is 16/27 = 59.3%, at b = ⅓.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- VI. THE WORLD IS CATCHING THE WIND -->
+          <section class="x-sec x-world" id="world" data-nav="The world" data-wind="1,0.7">
+            <div class="x-bg" data-par="0.15"><img src="offshore_sunset.jpg" alt="An offshore wind farm at sunset, painted in the style of Turner" /></div>
+            <div class="x-cloud" data-par="-0.3" style="--cw: 40vw; right: -10vw; top: 6%; --co: .25; --cd: 80s"><img src="cloud.png" alt="" /></div>
+            <div class="x-in">
+              <p class="x-num x-rv"><b>VI</b><span class="x-sc">Global Wind Report 2026 · 2025 data</span></p>
+              <h2 class="x-h2 x-rv"><span class="x-ln"><span>The world is</span></span><span class="x-ln" style="--j: 1"><span><em>catching the wind.</em></span></span></h2>
+              <div class="x-stats">
+                <div class="x-rv"><strong data-count="1299" data-suf=" GW">0</strong><p>Installed worldwide</p></div>
+                <div class="x-rv"><strong data-count="165" data-suf=" GW">0</strong><p>Added in 2025, a record, up 40%</p></div>
+                <div class="x-rv"><strong data-count="28395">0</strong><p>Turbines installed across 57 countries</p></div>
+                <div class="x-rv"><strong data-count="9.5" data-dec="1" data-suf="%">0</strong><p>Of the world's electricity</p></div>
+                <div class="x-rv"><strong data-count="138">0</strong><p>Countries use wind</p></div>
+              </div>
+              <div class="x-ticker x-rv">
+                <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="none" stroke="rgba(243,232,207,.2)" stroke-width="5" /><circle id="x-tring" cx="50" cy="50" r="44" fill="none" stroke="#ecd38f" stroke-width="5" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="276.5" /></svg>
+                <div>
+                  <p class="x-sc" style="color: var(--x-gold-l)">One new turbine every 18 min 31 s</p>
+                  <p>Since you opened this page, about <span class="x-tk" id="x-tk">0.00</span> new turbines were installed.</p>
+                </div>
+              </div>
+              <div class="x-split">
+                <div>
+                  <h3 class="x-rv">Where the 165 GW of 2025 went</h3>
+                  <div class="x-bars x-rv">
+                    <div class="x-bar"><span>China</span><i style="--w: 100%"></i><b>120.5</b></div>
+                    <div class="x-bar"><span>USA</span><i style="--w: 5.8%; --i: 1"></i><b>~7</b></div>
+                    <div class="x-bar"><span>India <small>record</small></span><i style="--w: 5.2%; --i: 2"></i><b>6.3</b></div>
+                    <div class="x-bar"><span>Rest of world</span><i style="--w: 25.7%; --i: 3"></i><b>~31</b></div>
+                  </div>
+                  <p class="x-fine">Gigawatts added in 2025.</p>
+                </div>
+                <div class="x-ring x-rv" id="x-ring">
+                  <svg viewBox="0 0 150 150" aria-hidden="true">
+                    <circle cx="75" cy="75" r="56" stroke="rgba(243,232,207,.15)" />
+                    <circle id="x-on" cx="75" cy="75" r="56" stroke="#c9a24a" stroke-dasharray="0 351.9" />
+                    <circle id="x-off" cx="75" cy="75" r="56" stroke="#f3e8cf" stroke-dasharray="0 351.9" />
+                  </svg>
+                  <p><span class="x-key" style="background: #c9a24a"></span>Onshore <b>155.3 GW</b><br /><span class="x-key" style="background: #f3e8cf"></span>Offshore <b>9.3 GW</b><br /><span style="opacity: .8">Added in 2025</span></p>
+                </div>
+              </div>
+              <p class="x-quote x-rv" style="color: var(--x-parch); margin-top: 56px">GWEC expects <em>969 GW more</em> in 2026–2030.</p>
+            </div>
+          </section>
+
+          <!-- VII. MYTH OR FACT -->
+          <section class="x-sec x-myth" id="myth" data-nav="Myth or fact" data-wind="0.6,0.4">
+            <div class="x-in">
+              <p class="x-num x-rv"><b>VII</b><span class="x-sc">Test your wind wisdom</span></p>
+              <h2 class="x-h2 x-rv"><span class="x-ln"><span>Myth</span></span><span class="x-ln" style="--j: 1"><span>or <em>fact?</em></span></span></h2>
+              <div class="x-laurel x-rv" aria-live="polite">
+                <svg viewBox="0 0 120 100" aria-hidden="true">
+                  <defs>
+                    <g id="x-lf" fill="#c9a24a" stroke="#7d5e1c" stroke-width=".6">
+                      <path d="M56 94 C28 88 12 62 20 16" fill="none" stroke="#c9a24a" stroke-width="1.6" />
+                      <ellipse cx="46" cy="90" rx="3.6" ry="8.5" transform="rotate(-62 46 90)" />
+                      <ellipse cx="34" cy="83" rx="3.6" ry="8.5" transform="rotate(-48 34 83)" />
+                      <ellipse cx="25" cy="71" rx="3.6" ry="8.5" transform="rotate(-30 25 71)" />
+                      <ellipse cx="19" cy="57" rx="3.6" ry="8.5" transform="rotate(-14 19 57)" />
+                      <ellipse cx="17" cy="42" rx="3.6" ry="8.5" transform="rotate(0 17 42)" />
+                      <ellipse cx="18" cy="27" rx="3.6" ry="8.5" transform="rotate(12 18 27)" />
+                      <ellipse cx="30" cy="62" rx="3" ry="7.5" transform="rotate(-70 30 62)" />
+                      <ellipse cx="25" cy="46" rx="3" ry="7.5" transform="rotate(-58 25 46)" />
+                      <ellipse cx="26" cy="30" rx="3" ry="7.5" transform="rotate(-44 26 30)" />
+                    </g>
+                  </defs>
+                  <use href="#x-lf" />
+                  <use href="#x-lf" transform="translate(120 0) scale(-1 1)" />
+                </svg>
+                <strong><span><span id="x-score">0</span> / 5</span></strong>
+              </div>
+              <p class="x-mdone" id="x-mdone" aria-live="polite"></p>
+              <div class="x-mgrid">
+                <div class="x-mcard x-rv" data-a="f">
+                  <div class="x-mflip">
+                    <div class="x-mf"><p class="x-sc">Myth or fact · i</p><p class="x-mq">“Wind power is really solar power.”</p><div class="x-mbtns"><button class="x-mbtn" type="button" data-a="m">Myth</button><button class="x-mbtn" type="button" data-a="f">Fact</button></div></div>
+                    <div class="x-mb" tabindex="-1" inert><p class="x-mres x-sc"></p><p class="x-mv">Fact</p><p>The Sun's uneven heating of Earth creates wind.</p><p class="x-mturn x-sc">Tap to turn back</p></div>
+                  </div>
+                </div>
+                <div class="x-mcard x-rv" data-a="m">
+                  <div class="x-mflip">
+                    <div class="x-mf"><p class="x-sc">Myth or fact · ii</p><p class="x-mq">“Turbines only work in strong winds.”</p><div class="x-mbtns"><button class="x-mbtn" type="button" data-a="m">Myth</button><button class="x-mbtn" type="button" data-a="f">Fact</button></div></div>
+                    <div class="x-mb" tabindex="-1" inert><p class="x-mres x-sc"></p><p class="x-mv">Myth</p><p>Most start generating at about 3 m/s, a gentle breeze.</p><p class="x-mturn x-sc">Tap to turn back</p></div>
+                  </div>
+                </div>
+                <div class="x-mcard x-rv" data-a="m">
+                  <div class="x-mflip">
+                    <div class="x-mf"><p class="x-sc">Myth or fact · iii</p><p class="x-mq">“Doubling the wind speed doubles the power.”</p><div class="x-mbtns"><button class="x-mbtn" type="button" data-a="m">Myth</button><button class="x-mbtn" type="button" data-a="f">Fact</button></div></div>
+                    <div class="x-mb" tabindex="-1" inert><p class="x-mres x-sc"></p><p class="x-mv">Myth</p><p>It gives about 8× the power: the cube law.</p><p class="x-mturn x-sc">Tap to turn back</p></div>
+                  </div>
+                </div>
+                <div class="x-mcard x-rv" data-a="m">
+                  <div class="x-mflip">
+                    <div class="x-mf"><p class="x-sc">Myth or fact · iv</p><p class="x-mq">“A turbine could capture 100% of the wind's energy.”</p><div class="x-mbtns"><button class="x-mbtn" type="button" data-a="m">Myth</button><button class="x-mbtn" type="button" data-a="f">Fact</button></div></div>
+                    <div class="x-mb" tabindex="-1" inert><p class="x-mres x-sc"></p><p class="x-mv">Myth</p><p>The Betz limit caps it at 59.3%.</p><p class="x-mturn x-sc">Tap to turn back</p></div>
+                  </div>
+                </div>
+                <div class="x-mcard x-rv" data-a="f">
+                  <div class="x-mflip">
+                    <div class="x-mf"><p class="x-sc">Myth or fact · v</p><p class="x-mq">“Turbine blades work like airplane wings.”</p><div class="x-mbtns"><button class="x-mbtn" type="button" data-a="m">Myth</button><button class="x-mbtn" type="button" data-a="f">Fact</button></div></div>
+                    <div class="x-mb" tabindex="-1" inert><p class="x-mres x-sc"></p><p class="x-mv">Fact</p><p>Their airfoil shape creates lift.</p><p class="x-mturn x-sc">Tap to turn back</p></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- VIII. FINALE -->
+          <section class="x-sec x-fin" id="finale" data-nav="Finale" data-wind="0.5,0.4">
+            <div class="x-bg" data-par="0.12"><img src="putti_blade.jpg" alt="A Baroque ceiling fresco of cherubs carrying a white turbine blade through the clouds" /></div>
+            <div class="x-cloud" data-par="-0.2" style="--cw: 44vw; left: -12vw; top: 10%; --co: .7; --sx: -70vw; --sy: -10vh"><img src="cloud.png" alt="" /></div>
+            <div class="x-cloud" data-par="-0.35" style="--cw: 50vw; right: -14vw; top: 48%; --co: .7; --sx: 70vw; --sy: 10vh; --cd: 75s"><img src="cloud.png" alt="" /></div>
+            <div class="x-cloud" data-par="-0.5" style="--cw: 36vw; left: 30vw; top: 70%; --co: .6; --sx: 0; --sy: 60vh; --cd: 50s"><img src="cloud.png" alt="" /></div>
+            <div class="x-in">
+              <p class="x-num x-rv" style="justify-content: center"><b>VIII</b><span class="x-sc">Finale</span></p>
+              <div class="x-ask">
+                <h2 class="x-h2 x-rv" style="margin-inline: auto"><span class="x-ln"><span>Now <em>you</em> are Aeolus.</span></span></h2>
+                <p class="x-rv">Press and hold anywhere, then let go.</p>
+                <div class="x-meter" aria-hidden="true"><i id="x-gm"></i></div>
+                <button class="x-gbtn x-rv" id="x-blow" type="button">Hold to blow</button>
+              </div>
+              <p class="x-final"><span class="x-ln"><span>The wind is free.</span></span><span class="x-ln" style="--j: 1"><span><em>The future is ours to catch.</em></span></span></p>
+            </div>
+          </section>
+
+          <footer class="x-foot">
+            <p>Data: Global Wind Energy Council, <em>Global Wind Report 2026</em>. Paintings AI-generated in classical styles.</p>
+            <nav aria-label="Back to sections">
+              <a href="#hero">Aeolus</a><a href="#origins">Origins</a><a href="#anatomy">Anatomy</a><a href="#turbine">Your turbine</a><a href="#betz">Betz limit</a><a href="#world">The world</a><a href="#myth">Myth or fact</a><a href="#finale">Finale</a>
+            </nav>
+          </footer>
+        </div>
+      </main>
+    </div>
+    <script src="hark.js"></script>
+    <script>
+      (function () {
+        "use strict";
+        var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var MOB = innerWidth < 760 || matchMedia("(pointer: coarse)").matches;
+        var $ = function (s, r) { return (r || document).querySelector(s); };
+        var $$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+        var lerp = function (a, b, t) { return a + (b - a) * t; };
+        var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+        var fmt = function (n, d) { return n.toLocaleString("en-US", { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); };
+
+        /* ---------- preloader ---------- */
+        var pre = $("#x-pre");
+        function hidePre() { pre.classList.add("is-done"); }
+        addEventListener("load", function () { setTimeout(hidePre, RM ? 0 : 1300); });
+        setTimeout(hidePre, RM ? 300 : 3200);
+
+        /* ---------- reveals and count-ups ---------- */
+        function countUp(el) {
+          var to = +el.dataset.count, d = +(el.dataset.dec || 0), suf = el.dataset.suf || "", t0 = performance.now();
+          if (RM) { el.textContent = fmt(to, d) + suf; return; }
+          (function step(t) {
+            var k = clamp((t - t0) / 1800, 0, 1), e = 1 - Math.pow(1 - k, 3);
+            el.textContent = fmt(to * e, d) + suf;
+            if (k < 1) requestAnimationFrame(step);
+          })(t0);
+        }
+        function ring() {
+          var C = 351.9, on = C * 155.3 / 164.6, off = $("#x-off");
+          $("#x-on").style.strokeDasharray = on.toFixed(1) + " " + C;
+          off.style.strokeDashoffset = (-on).toFixed(1);
+          off.style.strokeDasharray = (C - on).toFixed(1) + " " + C;
+        }
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            var el = e.target;
+            el.classList.add("is-in");
+            io.unobserve(el);
+            $$("[data-count]", el).forEach(countUp);
+            if (el.id === "x-ring") ring();
+          });
+        }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
+        $$(".x-rv").forEach(function (el) {
+          var sib = [].filter.call(el.parentElement.children, function (c) { return c.classList.contains("x-rv"); });
+          el.style.setProperty("--i", sib.indexOf(el));
+          io.observe(el);
+        });
+
+        /* ---------- scroll: progress, parallax, active section ---------- */
+        var secs = $$(".x-sec"), pars = $$("[data-par]"), rail = $$(".x-rail a"), prog = $("#x-prog");
+        var hero = $("#hero"), active = hero;
+        function onScroll() {
+          var vh = innerHeight, max = document.documentElement.scrollHeight - vh;
+          prog.style.transform = "scaleX(" + (max > 0 ? scrollY / max : 0).toFixed(4) + ")";
+          if (!RM) pars.forEach(function (el) {
+            var r = el.parentElement.getBoundingClientRect();
+            if (r.bottom < -100 || r.top > vh + 100) return;
+            var lim = el.classList.contains("x-bg") ? r.height * 0.11 : 9999;
+            var y = clamp((r.top + r.height / 2 - vh / 2) * -(+el.dataset.par), -lim, lim);
+            el.style.transform = "translate3d(0," + y.toFixed(1) + "px,0)";
+          });
+          for (var i = 0; i < secs.length; i++) {
+            var b = secs[i].getBoundingClientRect();
+            if (b.top <= vh * 0.5 && b.bottom > vh * 0.5) { active = secs[i]; break; }
+          }
+          var id = active.id === "history" ? "origins" : active.id;
+          rail.forEach(function (a) { a.classList.toggle("is-on", a.getAttribute("href") === "#" + id); });
+        }
+        var ticking = false;
+        addEventListener("scroll", function () {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(function () { ticking = false; onScroll(); });
+        }, { passive: true });
+        addEventListener("resize", onScroll);
+        onScroll();
+
+        /* ---------- global wind particles ---------- */
+        var cv = $("#x-wind"), cx = cv.getContext("2d"), W = 0, H = 0;
+        var MAX = RM ? 0 : MOB ? 130 : 420, P = [], wind = { s: 1, d: 1 };
+        var mouse = { x: -999, y: -999, vx: 0, vy: 0 }, heroImg = $("#x-heroimg");
+        function size() {
+          var d = Math.min(devicePixelRatio || 1, 2);
+          W = innerWidth; H = innerHeight;
+          cv.width = W * d; cv.height = H * d;
+          cx.setTransform(d, 0, 0, d, 0, 0);
+        }
+        size();
+        addEventListener("resize", size);
+        function mouth() {
+          var r = heroImg.getBoundingClientRect(), s = Math.max(r.width / 1376, r.height / 768), w = 1376 * s, h = 768 * s;
+          return { x: r.left + (r.width - w) / 2 + 0.405 * w, y: r.top + (r.height - h) / 2 + 0.295 * h };
+        }
+        function spawn(p, init) {
+          p.b = 0; p.off = 0; p.life = 0;
+          p.max = 90 + Math.random() * 160; p.v = 1.4 + Math.random() * 2.2; p.w = 0.4 + Math.random() * 1.3;
+          p.g = Math.random() < 0.62; p.a0 = (Math.random() - 0.5) * 0.25;
+          if (active === hero && hero.getBoundingClientRect().bottom > 0 && Math.random() < 0.7) {
+            var m = mouth();
+            p.x = m.x + Math.random() * 12; p.y = m.y + (Math.random() - 0.5) * 16;
+            p.a0 = 0.2 + (Math.random() - 0.5) * 0.4; p.v *= 1.3;
+          } else {
+            p.x = init ? Math.random() * W : -20 - Math.random() * 80; p.y = Math.random() * H;
+          }
+          if (init) p.life = Math.random() * p.max;
+        }
+        for (var i = 0; i < MAX; i++) { var np = {}; spawn(np, true); P.push(np); }
+        addEventListener("pointermove", function (e) {
+          var vx = e.clientX - mouse.x, vy = e.clientY - mouse.y;
+          var ok = Math.abs(vx) < 200 && Math.abs(vy) < 200;
+          mouse.vx = ok ? vx : 0; mouse.vy = ok ? vy : 0; mouse.x = e.clientX; mouse.y = e.clientY;
+        }, { passive: true });
+        function burst(x, y, k) {
+          P.forEach(function (p) {
+            var a = Math.random() * 6.283;
+            p.x = x + Math.cos(a) * 20; p.y = y + Math.sin(a) * 20; p.a0 = a;
+            p.v = (5 + Math.random() * 12) * k; p.b = 1; p.off = 0; p.life = 0; p.max = 70 + Math.random() * 90;
+          });
+        }
+        function drawWind(t) {
+          var cfg = active.dataset.wind, ts, td;
+          if (cfg === "sim") {
+            ts = S.v > 25 ? 3.4 : 0.2 + (S.v / 8) * 0.8;
+            td = clamp(0.12 + S.v / 14, 0.08, 1);
+          } else { var c = cfg.split(","); ts = +c[0]; td = +c[1]; }
+          wind.s = lerp(wind.s, ts, 0.05); wind.d = lerp(wind.d, td, 0.05);
+          cx.globalCompositeOperation = "destination-out";
+          cx.fillStyle = "rgba(0,0,0,.2)";
+          cx.fillRect(0, 0, W, H);
+          cx.globalCompositeOperation = "source-over";
+          cx.lineCap = "round";
+          var n = Math.round(MAX * wind.d), tt = t * 0.00025;
+          mouse.vx *= 0.9; mouse.vy *= 0.9;
+          for (var i = 0; i < MAX; i++) {
+            var p = P[i];
+            if (i >= n && !p.b) { p.off = 1; continue; }
+            if (p.off) spawn(p);
+            var a = p.a0 + (p.b ? 0.2 : 0.55) * Math.sin(p.x * 0.0032 + tt * 3) * Math.cos(p.y * 0.0041 - tt * 2);
+            var sp = p.b ? p.v : p.v * wind.s, vx = Math.cos(a) * sp, vy = Math.sin(a) * sp;
+            var dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
+            if (d2 < 25600) {
+              var d = Math.sqrt(d2) || 1, f = 1 - d / 160;
+              vx += (dx / d) * f * 4 + mouse.vx * f * 0.35;
+              vy += (dy / d) * f * 4 + mouse.vy * f * 0.35;
+            }
+            p.x += vx; p.y += vy; p.life++;
+            if (p.b) p.v *= 0.985;
+            if (p.life > p.max || p.x > W + 40 || p.x < -120 || p.y < -60 || p.y > H + 60) { spawn(p); continue; }
+            var al = Math.sin((Math.PI * p.life) / p.max) * (p.g ? 0.6 : 0.42);
+            cx.strokeStyle = p.g ? "rgba(236,211,143," + al.toFixed(3) + ")" : "rgba(255,255,255," + al.toFixed(3) + ")";
+            cx.lineWidth = p.w;
+            cx.beginPath(); cx.moveTo(p.x - vx * 4, p.y - vy * 4); cx.lineTo(p.x, p.y); cx.stroke();
+          }
+        }
+
+        /* ---------- IV: the turbine simulator ---------- */
+        var S = { v: 8, r: 60, ang: 0, om: 0, fe: 0, storm: 0, vis: false, dp: 0, da: 0, de: 0 };
+        var vIn = $("#x-v"), rIn = $("#x-r"), sim = $("#turbine"), cube = $("#x-cube");
+        var tc = $("#x-tc"), tx = tc.getContext("2d"), pc = $("#x-pc"), qx = pc.getContext("2d");
+        var out = { p: $("#x-p"), a: $("#x-a"), fp: $("#x-fp"), e: $("#x-e"), rpm: $("#x-rpm"), st: $("#x-st") };
+        function avail(v, r) { return 0.5 * 1.225 * Math.PI * r * r * v * v * v * 0.45; }
+        function outP(v, r) { return v < 3 || v > 25 ? 0 : Math.min(avail(v, r), avail(12, r)); }
+        function pw(w) { return w >= 1e6 ? fmt(w / 1e6, 2) + " MW" : fmt(w / 1e3, w < 1e4 ? 1 : 0) + " kW"; }
+        function syncInputs() {
+          vIn.value = S.v; rIn.value = S.r;
+          $("#x-vo").textContent = fmt(S.v, 1) + " m/s";
+          $("#x-ro").textContent = S.r + " m";
+          vIn.style.setProperty("--p", (S.v / 30) * 100 + "%");
+          rIn.style.setProperty("--p", ((S.r - 10) / 120) * 100 + "%");
+          var st = S.v < 3 ? "Idle — below the 3 m/s cut-in" : S.v > 25 ? "Storm — blades feathered, safety shutdown" : S.v >= 12 ? "Rated power — pitch control spills the excess" : "Generating";
+          if (out.st.textContent !== st) out.st.textContent = st;
+          sim.classList.toggle("is-storm", S.v > 25);
+        }
+        vIn.addEventListener("input", function () { S.v = +vIn.value; cube.classList.remove("is-on"); syncInputs(); });
+        rIn.addEventListener("input", function () { S.r = +rIn.value; syncInputs(); });
+        $("#x-dbl").addEventListener("click", function () {
+          var v0 = S.v >= 1 && S.v <= 15 ? S.v : 8, v1 = v0 * 2, t0 = performance.now(), dur = RM ? 0 : 1400;
+          cube.classList.remove("is-on");
+          $("#x-cubes").textContent = "Wind power through the rotor: " + pw(avail(v0, S.r)) + " → " + pw(avail(v1, S.r)) + (v1 > 12 ? ". Above 12 m/s the turbine caps at its rated output." : ".");
+          (function step(t) {
+            var k = dur ? clamp((t - t0) / dur, 0, 1) : 1, e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+            S.v = Math.round(lerp(v0, v1, e) * 10) / 10;
+            syncInputs();
+            if (k < 1) requestAnimationFrame(step); else cube.classList.add("is-on");
+          })(t0);
+        });
+        new IntersectionObserver(function (es) { S.vis = es[0].isIntersecting; }).observe(sim);
+
+        function fit(c, ctx) {
+          var r = c.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2), w = Math.round(r.width * d), h = Math.round(r.height * d);
+          if (c.width !== w || c.height !== h) { c.width = w; c.height = h; }
+          ctx.setTransform(d, 0, 0, d, 0, 0);
+          return { w: r.width, h: r.height };
+        }
+        function mix(a, b, t) { return "rgb(" + Math.round(lerp(a[0], b[0], t)) + "," + Math.round(lerp(a[1], b[1], t)) + "," + Math.round(lerp(a[2], b[2], t)) + ")"; }
+        function blade(L, bw) {
+          var g = tx.createLinearGradient(-bw, 0, bw, 0);
+          g.addColorStop(0, "#d9ccae"); g.addColorStop(0.45, "#fffaee"); g.addColorStop(1, "#c9b78f");
+          tx.fillStyle = g; tx.strokeStyle = "#b08a3a"; tx.lineWidth = 1.2;
+          tx.beginPath();
+          tx.moveTo(-bw * 0.35, 0);
+          tx.bezierCurveTo(-bw, -L * 0.12, -bw * 0.55, -L * 0.6, -bw * 0.08, -L);
+          tx.quadraticCurveTo(bw * 0.1, -L * 1.005, bw * 0.2, -L * 0.97);
+          tx.bezierCurveTo(bw * 0.45, -L * 0.6, bw * 0.6, -L * 0.15, bw * 0.35, 0);
+          tx.closePath(); tx.fill(); tx.stroke();
+          tx.strokeStyle = "rgba(201,162,74,.9)"; tx.lineWidth = 2;
+          tx.beginPath(); tx.moveTo(-bw * 0.12, -L * 0.93); tx.lineTo(bw * 0.18, -L * 0.92); tx.stroke();
+        }
+        function drawTurbine(dt) {
+          var z = fit(tc, tx), w = z.w, h = z.h;
+          var tgt = S.v > 25 ? 0 : S.v < 3 ? S.v * 0.03 : (7 * Math.min(S.v, 12)) / S.r;
+          S.om = lerp(S.om, tgt, S.v > 25 ? 0.025 : 0.05);
+          S.fe = lerp(S.fe, S.v > 25 ? 1 : 0, 0.03);
+          S.storm = lerp(S.storm, S.v > 25 ? 1 : 0, 0.04);
+          S.ang += S.om * dt;
+          var st = S.storm, g = tx.createLinearGradient(0, 0, 0, h);
+          g.addColorStop(0, mix([20, 42, 98], [7, 9, 15], st));
+          g.addColorStop(0.72, mix([84, 122, 188], [32, 36, 50], st));
+          g.addColorStop(1, mix([214, 190, 142], [40, 42, 50], st));
+          tx.fillStyle = g; tx.fillRect(0, 0, w, h);
+          var sg = tx.createRadialGradient(w * 0.82, h * 0.16, 0, w * 0.82, h * 0.16, w * 0.55);
+          sg.addColorStop(0, "rgba(255,226,150," + (0.5 * (1 - st)).toFixed(3) + ")"); sg.addColorStop(1, "rgba(255,226,150,0)");
+          tx.fillStyle = sg; tx.fillRect(0, 0, w, h);
+          if (st > 0.6 && !RM && Math.random() < 0.008) { tx.fillStyle = "rgba(225,232,255,.3)"; tx.fillRect(0, 0, w, h); }
+          tx.fillStyle = mix([52, 82, 70], [16, 18, 22], st);
+          tx.beginPath(); tx.moveTo(0, h); tx.lineTo(0, h * 0.9);
+          tx.quadraticCurveTo(w * 0.3, h * 0.83, w * 0.55, h * 0.9); tx.quadraticCurveTo(w * 0.8, h * 0.96, w, h * 0.87);
+          tx.lineTo(w, h); tx.fill();
+          var hx = w / 2, hy = h * 0.42, L = h * lerp(0.12, 0.38, (S.r - 10) / 120), base = h * 0.93;
+          var tg = tx.createLinearGradient(hx - h * 0.03, 0, hx + h * 0.03, 0);
+          tg.addColorStop(0, "#cfc2a4"); tg.addColorStop(0.45, "#fbf5e6"); tg.addColorStop(1, "#b5a47e");
+          tx.fillStyle = tg; tx.strokeStyle = "#b08a3a"; tx.lineWidth = 1;
+          tx.beginPath(); tx.moveTo(hx - h * 0.011, hy); tx.lineTo(hx + h * 0.011, hy); tx.lineTo(hx + h * 0.024, base); tx.lineTo(hx - h * 0.024, base); tx.closePath(); tx.fill(); tx.stroke();
+          tx.strokeStyle = "rgba(201,162,74,.8)";
+          [0.62, 0.64].forEach(function (k) { var y = lerp(hy, base, k), hw = lerp(h * 0.011, h * 0.024, k); tx.beginPath(); tx.moveTo(hx - hw, y); tx.lineTo(hx + hw, y); tx.stroke(); });
+          tx.fillStyle = tg; tx.strokeStyle = "#b08a3a";
+          tx.beginPath(); tx.moveTo(hx - h * 0.01, hy - h * 0.026); tx.lineTo(hx + h * 0.085, hy - h * 0.022); tx.quadraticCurveTo(hx + h * 0.1, hy, hx + h * 0.085, hy + h * 0.022); tx.lineTo(hx - h * 0.01, hy + h * 0.026); tx.closePath(); tx.fill(); tx.stroke();
+          var bw = L * 0.085 * (1 - S.fe * 0.65);
+          for (var i = 0; i < 3; i++) { tx.save(); tx.translate(hx, hy); tx.rotate(S.ang + i * 2.0944); blade(L, Math.max(bw, h * 0.008)); tx.restore(); }
+          var hg = tx.createRadialGradient(hx - h * 0.008, hy - h * 0.008, 0, hx, hy, h * 0.028);
+          hg.addColorStop(0, "#fff3c8"); hg.addColorStop(0.6, "#c9a24a"); hg.addColorStop(1, "#7d5e1c");
+          tx.fillStyle = hg; tx.beginPath(); tx.arc(hx, hy, h * 0.026, 0, 6.283); tx.fill();
+        }
+        function drawCurve(t) {
+          var z = fit(pc, qx), w = z.w, h = z.h, l = 4, b = h - 24, top = 14;
+          var X = function (v) { return l + (v / 30) * (w - l - 4); }, Y = function (f) { return b - f * (b - top); };
+          qx.clearRect(0, 0, w, h);
+          [[0, 3, "idle", "rgba(243,232,207,.05)"], [3, 12, "ramp", "rgba(201,162,74,.1)"], [12, 25, "rated", "rgba(201,162,74,.2)"], [25, 30, "cut-out", "rgba(190,60,40,.22)"]].forEach(function (zn) {
+            qx.fillStyle = zn[3]; qx.fillRect(X(zn[0]), top - 6, X(zn[1]) - X(zn[0]), b - top + 6);
+            qx.fillStyle = "rgba(243,232,207,.8)"; qx.font = "500 13px 'Cormorant SC', Georgia, serif"; qx.textAlign = "center";
+            qx.fillText(zn[2], (X(zn[0]) + X(zn[1])) / 2, h - 6);
+          });
+          qx.strokeStyle = "rgba(243,232,207,.35)"; qx.lineWidth = 1;
+          qx.beginPath(); qx.moveTo(l, b + 0.5); qx.lineTo(w - 4, b + 0.5); qx.stroke();
+          var rated = avail(12, S.r);
+          qx.strokeStyle = "#ecd38f"; qx.lineWidth = 2; qx.beginPath();
+          for (var v = 0; v <= 30.001; v += 0.1) { var y = Y(outP(v, S.r) / rated); v === 0 ? qx.moveTo(X(v), y) : qx.lineTo(X(v), y); }
+          qx.stroke();
+          var cxp = X(S.v), cyp = Y(outP(S.v, S.r) / rated), pr = 12 + (RM ? 0 : Math.sin(t * 0.005) * 4);
+          var gl = qx.createRadialGradient(cxp, cyp, 0, cxp, cyp, pr);
+          gl.addColorStop(0, "rgba(255,240,190,.9)"); gl.addColorStop(1, "rgba(255,240,190,0)");
+          qx.fillStyle = gl; qx.beginPath(); qx.arc(cxp, cyp, pr, 0, 6.283); qx.fill();
+          qx.fillStyle = "#fff6d6"; qx.beginPath(); qx.arc(cxp, cyp, 4, 0, 6.283); qx.fill();
+        }
+        function simNumbers() {
+          var p = outP(S.v, S.r), a = Math.PI * S.r * S.r, e = (p * 24) / 1e6, k = RM ? 1 : 0.12;
+          S.dp = Math.abs(S.dp - p) < 1 ? p : lerp(S.dp, p, k);
+          S.da = Math.abs(S.da - a) < 0.5 ? a : lerp(S.da, a, k);
+          S.de = Math.abs(S.de - e) < 0.001 ? e : lerp(S.de, e, k);
+          out.p.textContent = pw(S.dp);
+          out.a.textContent = fmt(S.da) + " m²";
+          out.fp.textContent = "≈ " + fmt(S.da / 7140, S.da < 71400 ? 1 : 0) + " football pitches";
+          out.e.textContent = fmt(S.de, S.de < 10 ? 2 : S.de < 100 ? 1 : 0) + " MWh";
+          out.rpm.textContent = "Rotor at " + fmt((S.om * 60) / 6.283, 1) + " rpm";
+        }
+
+        /* ---------- V: the Betz limit ---------- */
+        var bIn = $("#x-b"), bsec = $("#betz"), bc = $("#x-bc"), bx = bc.getContext("2d"), bq = $("#x-bq"), bqx = bq.getContext("2d");
+        var BZ = { b: 0.8, vis: false, on: false, P: [] }, SC = "500 14px 'Cormorant SC', Georgia, serif";
+        function cp(b) { return 0.5 * (1 + b) * (1 - b * b); }
+        function bpart(p, init) { p.x = init ? Math.random() : -0.03 - Math.random() * 0.06; p.y = (Math.random() * 2 - 1) * 2.6; p.a = 0; }
+        for (i = 0; i < (MOB ? 150 : 280); i++) { var bp = {}; bpart(bp, true); BZ.P.push(bp); }
+        function bSync() {
+          var b = BZ.b = +bIn.value;
+          BZ.on = Math.abs(b - 1 / 3) <= 0.03;
+          $("#x-bo").textContent = "b = " + fmt(b, 2);
+          bIn.style.setProperty("--p", b * 100 + "%");
+          $("#x-cp").textContent = fmt(cp(b) * 100, 1) + "%";
+          $("#x-bd").textContent = "The wind leaves at " + fmt(b * 100) + "% of its speed, and crosses the rotor at " + fmt(((1 + b) / 2) * 100) + "%.";
+          bsec.classList.toggle("is-betz", BZ.on);
+          var m = BZ.on ? "Betz limit reached: 59.3% — Albert Betz, 1919" : "";
+          if ($("#x-bm").textContent !== m) $("#x-bm").textContent = m;
+        }
+        bIn.addEventListener("input", bSync);
+        new IntersectionObserver(function (es) { BZ.vis = es[0].isIntersecting; }).observe(bsec);
+        function drawBetz(dt) {
+          var z = fit(bc, bx), w = z.w, h = z.h, cy = h * 0.46, R0 = h * 0.15, xd = 0.42, b = BZ.b;
+          var U = function (x) { return 1 - ((1 - b) / 2) * (1 + Math.tanh((x - xd) / 0.07)); };
+          var F = function (x) { return Math.min(3.2, Math.sqrt(1 / Math.max(U(x), 0.1))); };
+          var g = bx.createLinearGradient(0, 0, 0, h);
+          g.addColorStop(0, "#13295c"); g.addColorStop(1, "#0c1834");
+          bx.fillStyle = g; bx.fillRect(0, 0, w, h);
+          bx.setLineDash([3, 5]); bx.strokeStyle = "rgba(201,162,74,.45)"; bx.lineWidth = 1;
+          [-1, 1].forEach(function (s) { bx.beginPath(); for (var x = 0; x <= 1.001; x += 0.01) { var y = cy + s * R0 * F(x); x ? bx.lineTo(x * w, y) : bx.moveTo(0, y); } bx.stroke(); });
+          bx.setLineDash([]); bx.lineCap = "round";
+          BZ.P.forEach(function (p) {
+            var inn = Math.abs(p.y) < 1, sp = inn ? U(p.x) : 1;
+            p.x += sp * dt * (RM ? 0.08 : 0.22); p.a += dt;
+            if (p.x > 1.03 || p.a > 10) bpart(p);
+            var f = F(p.x), yy = inn ? p.y * f : Math.sign(p.y) * (Math.abs(p.y) + f - 1), px = p.x * w, py = cy + yy * R0;
+            bx.strokeStyle = inn ? "rgba(236,211,143," + (0.3 + 0.6 * sp).toFixed(2) + ")" : "rgba(243,232,207,.25)";
+            bx.lineWidth = inn ? 1.6 : 1;
+            bx.beginPath(); bx.moveTo(px - (sp * w * 0.035 + 1), py); bx.lineTo(px, py); bx.stroke();
+          });
+          var dx = xd * w, Rd = R0 * F(xd);
+          bx.strokeStyle = "rgba(243,232,207,.55)"; bx.lineWidth = 3;
+          bx.beginPath(); bx.moveTo(dx, cy); bx.lineTo(dx, h * 0.9); bx.stroke();
+          bx.save();
+          if (BZ.on) { bx.shadowColor = "#ecd38f"; bx.shadowBlur = 36; }
+          bx.fillStyle = BZ.on ? "rgba(236,211,143,.5)" : "rgba(201,162,74,.3)"; bx.strokeStyle = "#ecd38f"; bx.lineWidth = 1.5;
+          bx.beginPath(); bx.ellipse(dx, cy, Math.max(6, w * 0.018), Rd, 0, 0, 6.283); bx.fill(); bx.stroke();
+          bx.restore();
+          bx.fillStyle = "#c9a24a"; bx.beginPath(); bx.arc(dx, cy, 5, 0, 6.283); bx.fill();
+          bx.fillStyle = "rgba(243,232,207,.85)"; bx.font = SC; bx.textAlign = "center";
+          [[0.12, "ahead · 100%"], [xd, "rotor · " + fmt(((1 + b) / 2) * 100) + "%"], [0.84, "behind · " + fmt(b * 100) + "%"]].forEach(function (l) { bx.fillText(l[1], l[0] * w, h - 12); });
+        }
+        function drawBq(t) {
+          var z = fit(bq, bqx), w = z.w, h = z.h, l = 34, r = w - 6, top = 10, bot = h - 26;
+          var X = function (b) { return l + b * (r - l); }, Y = function (c) { return bot - (c / 0.65) * (bot - top); };
+          bqx.clearRect(0, 0, w, h);
+          bqx.fillStyle = "rgba(243,232,207,.09)"; bqx.fillRect(l, Y(0.5), r - l, Y(0.45) - Y(0.5));
+          bqx.font = "400 13px 'Cormorant Garamond', Georgia, serif"; bqx.fillStyle = "rgba(243,232,207,.75)";
+          bqx.textAlign = "right"; bqx.fillText("real turbines 45–50%", r - 4, Y(0.45) + 14);
+          [0, 0.2, 0.4, 0.6].forEach(function (c) { bqx.fillText(c * 100 + "%", l - 6, Y(c) + 4); });
+          bqx.fillStyle = "#ecd38f"; bqx.fillText("Betz 59.3%", r - 4, Y(16 / 27) - 5);
+          bqx.textAlign = "center"; bqx.fillStyle = "rgba(243,232,207,.75)"; bqx.font = SC;
+          [[0, "0"], [1 / 3, "⅓"], [1, "1"]].forEach(function (k) { bqx.fillText(k[1], X(k[0]), h - 6); });
+          bqx.strokeStyle = "rgba(243,232,207,.35)"; bqx.lineWidth = 1;
+          bqx.beginPath(); bqx.moveTo(l, bot + 0.5); bqx.lineTo(r, bot + 0.5); bqx.stroke();
+          bqx.setLineDash([3, 4]); bqx.strokeStyle = "rgba(236,211,143,.7)";
+          bqx.beginPath(); bqx.moveTo(l, Y(16 / 27)); bqx.lineTo(r, Y(16 / 27)); bqx.moveTo(X(1 / 3), Y(16 / 27)); bqx.lineTo(X(1 / 3), bot); bqx.stroke();
+          bqx.setLineDash([]); bqx.strokeStyle = "#ecd38f"; bqx.lineWidth = 2; bqx.beginPath();
+          for (var b = 0; b <= 1.001; b += 0.01) { b ? bqx.lineTo(X(b), Y(cp(b))) : bqx.moveTo(X(b), Y(cp(b))); }
+          bqx.stroke();
+          var px = X(BZ.b), py = Y(cp(BZ.b)), pr = (BZ.on ? 20 : 12) + (RM ? 0 : Math.sin(t * 0.005) * 4);
+          var gl = bqx.createRadialGradient(px, py, 0, px, py, pr);
+          gl.addColorStop(0, "rgba(255,240,190,.9)"); gl.addColorStop(1, "rgba(255,240,190,0)");
+          bqx.fillStyle = gl; bqx.beginPath(); bqx.arc(px, py, pr, 0, 6.283); bqx.fill();
+          bqx.fillStyle = "#fff6d6"; bqx.beginPath(); bqx.arc(px, py, 4, 0, 6.283); bqx.fill();
+        }
+        bSync();
+
+        /* ---------- VII: myth or fact ---------- */
+        var score = 0, answered = 0;
+        $$(".x-mcard").forEach(function (c) {
+          var f = $(".x-mf", c), bk = $(".x-mb", c);
+          function turn(on) { c.classList.toggle("is-flipped", on); f.inert = on; bk.inert = !on; }
+          $$(".x-mbtn", c).forEach(function (btn) {
+            btn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              if (!c.dataset.done) {
+                var ok = btn.dataset.a === c.dataset.a;
+                c.dataset.done = "1"; c.classList.add(ok ? "is-right" : "is-wrong"); btn.classList.add("is-pick");
+                $(".x-mres", bk).textContent = ok ? "✓ Correct" : "✗ Not quite";
+                score += ok ? 1 : 0; answered++;
+                $("#x-score").textContent = score;
+                if (answered === 5) $("#x-mdone").textContent = score === 5 ? "A perfect five. Aeolus himself would crown you." : "All five answered. Tap any card to read it again.";
+              }
+              turn(true); bk.focus();
+            });
+          });
+          c.addEventListener("click", function () { if (c.dataset.done) { turn(!c.classList.contains("is-flipped")); if (!c.classList.contains("is-flipped")) $(".is-pick", c).focus(); } });
+          bk.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); c.click(); } });
+        });
+
+        /* ---------- VI: the live ticker ---------- */
+        var open = Date.now(), tk = $("#x-tk"), tring = $("#x-tring");
+        function tick() {
+          var s = (Date.now() - open) / 1000;
+          tk.textContent = fmt(s / 1111, 2);
+          tring.style.strokeDashoffset = (276.5 * (1 - (s % 1111) / 1111)).toFixed(2);
+        }
+        tick();
+        setInterval(tick, 500);
+
+        /* ---------- III: anatomy notes ---------- */
+        var TIPS = {
+          blades: ["Blades", "Airfoils shaped like aircraft wings. Air flowing over them creates lift, and lift turns the rotor."],
+          hub: ["Hub & pitch", "The hub twists each blade to the best angle, and feathers them edge-on to the wind in storms."],
+          gear: ["Gearbox", "Steps the rotor's slow 10–20 rpm up to generator speed. Some turbines skip it: they are direct-drive."],
+          gen: ["Generator", "Magnets spin past copper coils, and electromagnetic induction turns motion into electricity."],
+          yaw: ["Yaw", "A motorised bearing turns the whole nacelle to face the wind."],
+          tower: ["Tower", "Height matters: wind is stronger and smoother higher up."]
+        };
+        var tip = $("#x-tip"), openB = null;
+        function closeTip() { tip.classList.remove("is-open"); if (openB) openB.setAttribute("aria-expanded", "false"); openB = null; }
+        $$(".x-hot").forEach(function (b) {
+          b.addEventListener("click", function (e) {
+            e.stopPropagation();
+            if (openB === b) return closeTip();
+            closeTip();
+            var d = TIPS[b.dataset.k];
+            $("h3", tip).textContent = d[0]; $("p", tip).textContent = d[1];
+            tip.style.left = b.style.left; tip.style.top = b.style.top;
+            tip.classList.toggle("is-flip", parseFloat(b.style.left) > 55);
+            tip.classList.add("is-open");
+            b.setAttribute("aria-expanded", "true");
+            openB = b;
+          });
+        });
+        document.addEventListener("click", function (e) { if (openB && !tip.contains(e.target)) closeTip(); });
+        addEventListener("keydown", function (e) { if (e.key === "Escape") closeTip(); });
+
+        /* ---------- VIII: hold to blow ---------- */
+        var fin = $("#finale"), gm = $("#x-gm"), blowBtn = $("#x-blow"), charge = 0, holding = false, blown = false;
+        function hold(e) { if (blown || (e.target.closest && e.target.closest("a"))) return; holding = true; }
+        function release(cancel) {
+          if (!holding) return;
+          holding = false;
+          if (cancel || charge < 0.06) return;
+          blown = true;
+          var r = fin.getBoundingClientRect();
+          if (MAX) burst(W / 2, clamp(r.top + r.height / 2, 0, H), 0.5 + charge);
+          fin.classList.add("is-blown");
+          requestAnimationFrame(function () { requestAnimationFrame(function () { fin.classList.add("is-shown"); }); });
+        }
+        fin.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse" || e.button === 0) hold(e); });
+        addEventListener("pointerup", function () { release(false); });
+        addEventListener("pointercancel", function () { release(true); charge = 0; });
+        fin.addEventListener("contextmenu", function (e) { if (holding) e.preventDefault(); });
+        blowBtn.addEventListener("click", function () { if (blown) return; holding = true; charge = Math.max(charge, 0.5); release(false); });
+        blowBtn.addEventListener("keydown", function (e) { if ((e.key === " " || e.key === "Enter") && !e.repeat) { e.preventDefault(); hold(e); } });
+        blowBtn.addEventListener("keyup", function (e) { if (e.key === " " || e.key === "Enter") release(false); });
+
+        /* ---------- main loop ---------- */
+        var last = performance.now();
+        function loop(t) {
+          var dt = Math.min(0.05, (t - last) / 1000);
+          last = t;
+          if (MAX) drawWind(t);
+          if (S.vis) { drawTurbine(dt); drawCurve(t); simNumbers(); }
+          if (BZ.vis) { drawBetz(dt); drawBq(t); }
+          if (!blown) {
+            charge = holding ? Math.min(1, charge + dt / 1.5) : Math.max(0, charge - dt * 2);
+            gm.style.transform = "scaleX(" + charge.toFixed(3) + ")";
+          }
+          requestAnimationFrame(loop);
+        }
+        syncInputs();
+        requestAnimationFrame(loop);
+      })();
+    </script>
+  </body>
+</html>
